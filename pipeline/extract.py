@@ -39,7 +39,6 @@ def extract_data() -> pd.DataFrame :
     return df
 
 
-data =  extract_data()
+# data =  extract_data()
 
-print(data.head(2))
 

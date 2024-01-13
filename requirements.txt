@@ -9,7 +9,7 @@ psycopg2-binary==2.9.5
 sqlalchemy==1.4.46
 python-dotenv==1.0.0
 sodapy==2.2.0
-pydantic==1.10.11  #for predect downgrading the pydantic
-# -e .
+pydantic==1.10.11
+-e .
 
 

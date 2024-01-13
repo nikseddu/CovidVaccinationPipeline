@@ -41,6 +41,9 @@ import json
 # ws.close()
 
 
-data = pd.read_csv("D:\Grind\DataEngineering\Datatalks\CoinbasePipeline\otebooks\estat_lfsa_qoe_3a4.tsv",sep="\t")
-print(data.shape)
-print(data.head(4))
+# data = pd.read_csv("D:\Grind\DataEngineering\Datatalks\CoinbasePipeline\otebooks\estat_lfsa_qoe_3a4.tsv",sep="\t")
+# print(data.shape)
+# print(data.head(4))
+
+
+
