@@ -59,7 +59,7 @@ def write_to_local(df:pd.DataFrame,state: str, path:Path) -> Path:
     
     """
     default_directory = os.getenv("PROJECT_DIRECTORY")
-    path = Path(f"{default_directory}/data/{state}/{path}")
+    path = Path(f"{default_directory}/data/{state}/{path}.parquet")
     path.parent.mkdir(parents=True, exist_ok=True) # MAking the country folder if doesn't exits
     df.to_parquet(path,compression="gzip") 
     return path
@@ -72,8 +72,7 @@ def write_to_gcs(path : Path) -> None:
     
     """
     gcs_block = GcsBucket.load("vaccination-block")
-    gcs_block.upload_from_path(from_path = f"{path}", 
-                               to_path=f"data/{os.path.basename(path)}.parquet")
+    gcs_block.upload_from_path(from_path = f"{path}")
     
     return
     
