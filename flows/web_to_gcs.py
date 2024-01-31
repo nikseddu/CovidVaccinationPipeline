@@ -73,7 +73,7 @@ def write_to_gcs(path : Path) -> None:
     """
     gcs_block = GcsBucket.load("vaccination-block")
     gcs_block.upload_from_path(from_path = f"{path}", 
-                               to_path=f"{os.path.basename(path)}.parquet")
+                               to_path=f"data/{os.path.basename(path)}.parquet")
     
     return
     
