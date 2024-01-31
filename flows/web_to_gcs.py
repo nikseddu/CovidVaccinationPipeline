@@ -66,11 +66,16 @@ def write_to_local(df:pd.DataFrame,state: str, path:Path) -> Path:
 
 
 @task(retries=1, name="Will push the data to the google cloud storage")
-def write_to_gcs(data : pd.DataFrame) -> None:
+def write_to_gcs(path : Path) -> None:
     """
+    Write the parquet file to the Google cloud
     
     """
-    pass
+    gcs_block = GcsBucket.load("vaccination-block")
+    gcs_block.upload_from_path(from_path = f"{path}", 
+                               to_path=f"{os.path.basename(path)}.parquet")
+    
+    return
     
 
 @flow(name="Data from Socrata to Google Cloud")
@@ -88,13 +93,14 @@ def etl_web_to_gcs(state,year) -> None:
     data = clean(data) # basic preprocessing
 
     dataset_file = f"{state}_{year}"
+
     path = write_to_local(data,state, dataset_file) 
     
-    # write_to_gcs(data) # Writing to gcs
+    write_to_gcs(path) # Writing to gcs
 
     pass
 
-@flow(name="parent flow")
+@flow(name="parent flow for Data from Socrata to Google Cloud ")
 def parent_flow() -> None:
 
     state = "NY" 
