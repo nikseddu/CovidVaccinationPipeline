@@ -7,7 +7,9 @@ from random import randint
 from sodapy import Socrata 
 from dotenv import load_dotenv
 from requests.exceptions import RequestException
+from datetime import timedelta,date
 import datetime
+from prefect.tasks import task_input_hash
 
 load_dotenv()
 
@@ -26,7 +28,7 @@ def get_client(path :str) -> any:
     return client
 
 
-@task(retries=3, name="Will fetch the data using socrata API",log_prints=True)
+@task(retries=3, name="Will fetch the data using socrata API",log_prints=True,cache_key_fn=task_input_hash,cache_expiration=timedelta(days=1))
 def fetch(client : any, states: str, year:int) -> pd.DataFrame:
        
     try :
@@ -37,6 +39,8 @@ def fetch(client : any, states: str, year:int) -> pd.DataFrame:
         results = client.get("8xkx-amqh", recip_state=states, where= condition,limit=100000)
         
         df = pd.DataFrame.from_records(results)
+
+        print(df.head(2))
 
         return df
     
@@ -78,7 +82,7 @@ def write_to_gcs(path : Path) -> None:
     
 
 @flow(name="Data from Socrata to Google Cloud")
-def etl_web_to_gcs(state,year) -> None:
+def etl_web_to_gcs(state: str,year: int) -> None:
     """
     Main flow 
     
@@ -88,6 +92,7 @@ def etl_web_to_gcs(state,year) -> None:
     client = get_client(apiPath) # Getting the Socrata client
 
     data = fetch(client, state,year)  # Fetching the data from api
+
 
     data = clean(data) # basic preprocessing
 
@@ -100,12 +105,13 @@ def etl_web_to_gcs(state,year) -> None:
     pass
 
 @flow(name="parent flow for Data from Socrata to Google Cloud ")
-def parent_flow() -> None:
+def parent_flow( states : list[str] = ["NY", "NC"] , year : int = 2021) -> None:
 
-    state = "NY" 
-    year = 2021
-    etl_web_to_gcs(state,year)
-
+    for state in states:
+        etl_web_to_gcs(state,year)
 
 if __name__ == "__main__":
-    parent_flow()
+    
+    states = ["NY", "NC"]
+    year = 2021
+    parent_flow(states, year)
