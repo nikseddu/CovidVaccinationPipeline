@@ -105,7 +105,7 @@ def etl_web_to_gcs(state: str,year: int) -> None:
     pass
 
 @flow(name="parent flow for Data from Socrata to Google Cloud ")
-def parent_flow( states : list[str] = ["NY", "NC"] , year : int = 2021) -> None:
+def parent_flow_web_to_gcs( states : list[str] = ["NY", "NC"] , year : int = 2021) -> None:
 
     for state in states:
         etl_web_to_gcs(state,year)
@@ -114,4 +114,4 @@ if __name__ == "__main__":
     
     states = ["NY", "NC"]
     year = 2021
-    parent_flow(states, year)
+    etl_web_to_gcs(states, year)

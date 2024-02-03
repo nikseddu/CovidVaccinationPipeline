@@ -18,15 +18,20 @@ def extract_from_gcs(state:str, year:int) -> Path:
 
     filename = f"{state}_{year}.parquet"
     gcs_block = GcsBucket.load("vaccination-block")
+    print("-----------------------------------------------------------------------")
+    print("FROM  {0} ".format( filename ) )
+    print(f"data/{state}/")
+    print("----------------------------------------------------------------------")
     gcs_block.get_directory(from_path=filename,local_path=f"data/{state}/")
-    return Path(f"../data/{filename}")
+    return Path(f"data/{state}/{filename}") , state
     
 @task(name="Transforming the data")
-def transform(path: Path)->pd.DataFrame:
+def transform(path: Path , state : str)->pd.DataFrame:
     """
     To do basic cleaing of the data before putting it into big query
     
     """
+    print("--------------------------------------------------------------------------------------------------------------------------")
     print(path)
     df = pd.read_parquet(path)
 
@@ -101,45 +106,45 @@ def transform(path: Path)->pd.DataFrame:
     
     fill_values(data)
 
-    return data
-
+    return data , state
 
 
 @task(name="Transfers the data to Big query")
-def write_bq(df: pd.DataFrame) -> None:
+def write_bq(df: pd.DataFrame, state: str) -> None:
     """
     Writes the data to big query
     """
     gcp_credentials_block = GcpCredentials.load("vaccination-gcp-creds")
 
     df.to_gbq(
-        destination_table= "us.vaccination" ,
+        destination_table= f"us.{state}" ,
         project_id= "covidvaccinationpipeline",
         credentials=  gcp_credentials_block.get_credentials_from_service_account(),
         chunksize=500_000,
         if_exists="append"
     )
 
-
-@flow
+@flow(name="Data from Google Cloud to Google Big query")
 def etl_gcs_to_bq(state: str,year:int)-> None:
     """
     Main etl flow for gcs to bq
     """
 
-    path = extract_from_gcs(state,year)
-    data = transform(path)
-    write_bq(data)
+    path, state = extract_from_gcs(state,year)
+    print("-------------------------------------------------------------------------------------------------------------------")
+    print(path)
+    data, state = transform(path,state)
+    write_bq(data, state)
 
 
-@flow(name="parent flow for Data from Socrata to Google Cloud ")
-def parent_flow() -> None:
+@flow(name="Parent flow for Data from Google Cloud to Big qyert ")
+def parent_flow_gcs_to_bq(states : list[str] = ["NY", "NC"] , year : int = 2021) -> None:
 
-    state = "NY" 
-    year = 2021
-    etl_gcs_to_bq(state,year)
-
+    for state in states:
+        etl_gcs_to_bq(state,year)
 
 
 if __name__ == "__main__":
-    parent_flow()
+    states = ["NY", "NC"]
+    year = 2021
+    parent_flow_gcs_to_bq()

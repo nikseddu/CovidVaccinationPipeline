@@ -1,0 +1,56 @@
+###
+### A complete description of a Prefect Deployment for flow 'Parent flow for Data from Google Cloud to Big qyert '
+###
+name: Flow for GCS to Big Query
+description: null
+version: 5a254b1f664bf4d1fecfea4a45d24cbb
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+work_pool_name: null
+tags: []
+parameters: {}
+schedule: null
+is_schedule_active: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: 'Parent flow for Data from Google Cloud to Big qyert '
+manifest_path: null
+storage: null
+path: D:\Grind\DataTalk\DataEngineering\CovidVaccinationPipeline\flows
+entrypoint: gcs_to_bq.py:parent_flow_gcs_to_bq
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    states:
+      title: states
+      default:
+      - NY
+      - NC
+      position: 0
+      type: array
+      items:
+        type: string
+    year:
+      title: year
+      default: 2021
+      position: 1
+      type: integer
+  required: null
+  definitions: null
+timestamp: '2024-02-03T23:56:57.853709+00:00'
+triggers: []
+enforce_parameter_schema: null
