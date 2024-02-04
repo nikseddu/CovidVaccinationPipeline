@@ -54,22 +54,22 @@ def transform(path: Path , state : str)->pd.DataFrame:
             
     # data.rename(columns=changeName, inplace=True)
 
-    #Enforcing the type
-    # type_matrix = {
-    # "Date" : "datetime64",
-    # "FIPS" : "category",
-    # "County": "string",
-    # "State" : "category",
-    # "MetroStatus" : "category"
+    # Enforcing the type
+    type_matrix = {
+    "date" : "datetime64",
+    "fips" : "category",
+    "recip_county": "string",
+    "recip_state" : "category",
+    "metro_status" : "category"
         
-    # }
+    }
 
-    # def enforce_type(df, type_matrix):
-    #     new_types = {col: type_matrix.get(col, "float") for col in df.columns}
+    def enforce_type(df, type_matrix):
+        new_types = {col: type_matrix.get(col, "float") for col in df.columns}
         
-    #     return df.astype(new_types)
+        return df.astype(new_types)
     
-    # data = enforce_type(data,type_matrix)
+    data = enforce_type(data,type_matrix)
 
     # Removing Unknown Counties 
     try:
@@ -98,7 +98,6 @@ def transform(path: Path , state : str)->pd.DataFrame:
         percentage = (df["census2019_65pluspop"].max()/df["census2019"].max())*100
         
         df["census2019_65pluspop"] = df["census2019"]*(percentage*10e-3)
-        
         
         #For Booster Done df, It makes sense to fill 0 as 
         df["booster_doses"].fillna(0.0, inplace=True) 
