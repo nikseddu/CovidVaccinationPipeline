@@ -1,0 +1,9 @@
+version: 2
+sources:
+  - name: staging
+    database: covidvaccinationpipeline
+    schema: us
+    
+    tables:
+      - name: NY
+      - name: NC
