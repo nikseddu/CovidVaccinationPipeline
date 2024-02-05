@@ -40,7 +40,6 @@ def fetch(client : any, states: str, year:int) -> pd.DataFrame:
         
         df = pd.DataFrame.from_records(results)
 
-        print(df.head(2))
 
         return df
     
