@@ -45,22 +45,22 @@ def transform(path: Path , state : str)->pd.DataFrame:
     
     #Renaming Columns To make more sense of the data
 
-    changeName={'fips':'FIPS','date':'Date','recip_county':'County','recip_state':'State', 'administered_dose1_recip':'OneDoseComplete',\
-                'administered_dose1_pop_pct':'OneDoseCompleteP','administered_dose1_recip_18plus':'OneDoseComplete18P',\
-                'administered_dose1_recip_65plus':'OneDoseComplete65P'
-                ,'booster_doses':'BoosterDone','series_complete_pop_pct':'CompleteDosagePercentage','series_complete_pop_pct_svi':'CompleteDosageWBoosterPercentage','census2019'\
-                :'Population2019','census2019_18pluspop':'Population18P2019','census2019_65pluspop':'Population65P2019','metro_status':'MetroStatus'}
+    # changeName={'fips':'FIPS','date':'Date','recip_county':'County','recip_state':'State', 'administered_dose1_recip':'OneDoseComplete',\
+    #             'administered_dose1_pop_pct':'OneDoseCompleteP','administered_dose1_recip_18plus':'OneDoseComplete18P',\
+    #             'administered_dose1_recip_65plus':'OneDoseComplete65P'
+    #             ,'booster_doses':'BoosterDone','series_complete_pop_pct':'CompleteDosagePercentage','series_complete_pop_pct_svi':'CompleteDosageWBoosterPercentage','census2019'\
+    #             :'Population2019','census2019_18pluspop':'Population18P2019','census2019_65pluspop':'Population65P2019','metro_status':'MetroStatus'}
                 
             
-    data.rename(columns=changeName, inplace=True)
+    # data.rename(columns=changeName, inplace=True)
 
-    #Enforcing the type
+    # Enforcing the type
     type_matrix = {
-    "Date" : "datetime64",
-    "FIPS" : "category",
-    "County": "string",
-    "State" : "category",
-    "MetroStatus" : "category"
+    "date" : "datetime64",
+    "fips" : "category",
+    "recip_county": "string",
+    "recip_state" : "category",
+    "metro_status" : "category"
         
     }
 
@@ -86,23 +86,22 @@ def transform(path: Path , state : str)->pd.DataFrame:
         
         """
         
-        df["OneDoseComplete"] = pd.concat([ df["OneDoseComplete"].fillna(method='ffill'),  df["OneDoseComplete"].fillna(method='bfill')], axis=1).mean(axis=1)
-        df["OneDoseComplete18P"] = pd.concat([ df["OneDoseComplete18P"].fillna(method='ffill'),  df["OneDoseComplete18P"].fillna(method='bfill')], axis=1).mean(axis=1)
-        df["OneDoseComplete65P"] = pd.concat([ df["OneDoseComplete65P"].fillna(method='ffill'),  df["OneDoseComplete65P"].fillna(method='bfill')], axis=1).mean(axis=1)
+        df["administered_dose1_recip"] = pd.concat([ df["administered_dose1_recip"].fillna(method='ffill'),  df["administered_dose1_recip"].fillna(method='bfill')], axis=1).mean(axis=1)
+        df["administered_dose1_recip_18plus"] = pd.concat([ df["administered_dose1_recip_18plus"].fillna(method='ffill'),  df["administered_dose1_recip_18plus"].fillna(method='bfill')], axis=1).mean(axis=1)
+        df["administered_dose1_recip_65plus"] = pd.concat([ df["administered_dose1_recip_65plus"].fillna(method='ffill'),  df["administered_dose1_recip_65plus"].fillna(method='bfill')], axis=1).mean(axis=1)
         
             
         #For Filling the 65 Plus Population, I'm first counting the percentage poulation of 65 plus for the county with max Population(assuming 
         #Highest Population means highest number of 65 plus people)
         # Then imputing the same percentage out of total Population for that county( Which is in ~15% of the Total Population for that county)
 
-        percentage = (df["Population65P2019"].max()/df["Population2019"].max())*100
+        percentage = (df["census2019_65pluspop"].max()/df["census2019"].max())*100
         
-        df["Population65P2019"] = df["Population2019"]*(percentage*10e-3)
-        
+        df["census2019_65pluspop"] = df["census2019"]*(percentage*10e-3)
         
         #For Booster Done df, It makes sense to fill 0 as 
-        df["BoosterDone"].fillna(0.0, inplace=True) 
-        df["CompleteDosageWBoosterPercentage"].fillna(0.0, inplace=True) 
+        df["booster_doses"].fillna(0.0, inplace=True) 
+        df["series_complete_pop_pct_svi"].fillna(0.0, inplace=True) 
     
     fill_values(data)
 
