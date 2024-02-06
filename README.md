@@ -1,6 +1,6 @@
 # Data Engineering Pipleine to perform Analytics on Covid Vaccinations Data Using Google Cloud
 
-![Overview](images/demo_repub.png)
+![Overview](images/demo_repub.jpg)
 
 
 
@@ -10,12 +10,10 @@
 - [The dataset](#the-dataset)
 - [Data modeling](#data-modeling)
 - [Tools](#tools)
-- [Scalability](#scalability)
-
-
-
+- [Insights](#Insights)
+  
 ## Overview
-This project builds an end-to-end orchestrated data pipeline to perform analytics on Covid Vaccine data. The data has been extracted with the help of SODA API for the states of Newyork and North Carolina. To reduce the scope of the project, only 2021 is considered. We are going to build a data pipeline which collects data from source, applies transformations and displays the preprocessed data into a dashboard.
+This project builds an end-to-end orchestrated data pipeline to perform analytics on Covid Vaccine data. The data has been extracted with the help of SODA API for the states of Newyork and North Carolina. To reduce the scope of the project, only 2021 is considered. We are going to build a data pipeline which collects data from source, applies transformations and displays the preprocessed data.
 
 ![Architecture](images/architecture.png)
 
@@ -23,7 +21,7 @@ This project builds an end-to-end orchestrated data pipeline to perform analytic
 As political beliefs can influence public perception and trust in government institutions and health authorities. This project aims to test these by analysing the actual numbers of vaccine dosage administrated for the two states. New York State has voted Democratic in national elections since 1988 and North Carolina on the other hand has been Republican. Other than that, Vaccine growth within the state was also analysed.
 
 
-## The dateset
+## The dataset
 
 The dataset was accessed using Soda API and had orignally had 51 different attributes which were reduced to 15. 
 
@@ -49,8 +47,28 @@ The dataset was accessed using Soda API and had orignally had 51 different attri
 
 ## Data modeling
 
-We are going to build a **Star Schema** which comprises one fact and multiple dimension tables for our Data Warehouse.
+ **Star Schema**  was used which comprises one fact and multiple dimension tables for our Data Warehouse. 
+ Further, in dbt staging and Production dataset were setup
 
-
+The lineage for the dataset looks as follows:
 
 ![transformation](images/dbt_lineage.png)
+
+
+## Tools
+- Cloud: `Google Cloud`
+- Orchestration: `Prefect`
+- Data lake: `Google Cloud Storage`
+- Data transformation: `DBT`
+- Data warehouse: `BigQuery`
+- Data visualization: `Google Looker Studio`
+
+## Insights
+
+- 
+
+
+
+
+
+
