@@ -61,11 +61,26 @@ The lineage for the dataset looks as follows:
 - Data lake: `Google Cloud Storage`
 - Data transformation: `DBT`
 - Data warehouse: `BigQuery`
-- Data visualization: `Google Looker Studio`
+- Data visualization: `Folium and Plotly`
 
 ## Insights
 
-- 
+Newyork had higher vaccine rates than North Carolina.
+
+Few possible reasons could be
+
+  - Democratic-leaning states like New York  have implemented more proactive vaccination policies and rolled out vaccination programs earlier compared to Republican-leaning states like North Carolina.
+    
+  - In Democratic-leaning states like New York, residents may have higher trust in public health messaging and government-led vaccination efforts, leading to higher vaccination rates. Conversely, in North Carolina, there may be more skepticism towards government intervention,
+  
+  - Newyork may have stronger healthcare infrastructure and greater access to healthcare services, which could facilitate vaccine distribution and administration.
+
+
+Further, within Newyork Hamilton and queens county showed the most progress over the year
+
+![Newyork](images/NY.png)
+
+  
 
 
 
