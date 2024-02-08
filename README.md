@@ -65,9 +65,7 @@ The lineage for the dataset looks as follows:
 
 ## Insights
 
-New York had higher vaccine rates than North Carolina.
-
-Few possible reasons could be
+New York had higher vaccine rates than North Carolina for few of the following possible reasons:
 
   - Democratic-leaning states like New York  have implemented more proactive vaccination policies and rolled out vaccination programs earlier compared to Republican-leaning states like North Carolina.
     
